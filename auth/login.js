@@ -1,14 +1,43 @@
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-
-const token = require("../models/user");
-
 const bcrypt = require("bcrypt");
 
-exports.login = function (req, res) {
-  const { email, password } = req.body;
+exports.login = async function (req, res) {
+  try {
+    const { email, password } = req.body;
+    if (!(email && password)) {
+      return res.status(400).send("Tous les champs sont requis");
+    }
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(400).send("Identifiants invalides");
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      return res.status(400).send("Identifiants invalides");
+    }
+
+    const token = jwt.sign(
+      { user_id: user._id, email },
+      process.env.TOKEN_KEY,
+      { expiresIn: "2h" }
+    );
+
+    user.token = token;
+
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Une erreur s'est produite lors de la connexion");
+  }
+};
+
   // Find the user by email
-  User.findOne({ email })
+  /* User.findOne({ email })
     .then((user) => {
       if (!user) {
         return res.status(404).json({ email: "Utilisateur introuvable" });
@@ -39,5 +68,4 @@ exports.login = function (req, res) {
         error:
           "Une erreur s'est produite lors de la recherche de l'utilisateur",
       });
-    });
-};
+    }); */
