@@ -1,5 +1,10 @@
-module.exports = function (app) {
+
+var express=require("express")
+var router = express.Router()
   var userHandlers = require("../controllers/user");
 
-  app.route("/auth/register").post(userHandlers.register);
-};
+  router.post("/register", (req,res)=>{
+    userHandlers.register(req,res)
+  });
+
+  module.exports = router

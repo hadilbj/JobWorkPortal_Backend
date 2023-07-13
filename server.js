@@ -1,15 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-const register = require("./controllers/user");
+//const register = require("./controllers/user");
 
-const UserRouter = require("./api/user");
+const UserRouter = require("./routes/userRoute");
 
 const User = require("./models/user");
 
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
-
 app.use(bodyParser.json());
 
 const bcrypt = require("bcrypt");
@@ -25,11 +24,8 @@ app.post("/login", (req, res) => {
   res.json("login");
 });
 
-app.post("/register", (req, res) => {
-  res.json(User)
-});
+app.use("/user", UserRouter)
 
-app.use("/user", UserRouter);
 
 mongoose
   .connect(
