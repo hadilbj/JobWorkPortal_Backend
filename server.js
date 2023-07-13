@@ -11,8 +11,6 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
 
 //routes
 
@@ -20,9 +18,9 @@ app.get("/", (req, res) => {
   res.send("Hello JobWorkPortal ");
 });
 
-app.post("/login", (req, res) => {
+/* app.post("/login", (req, res) => {
   res.json("login");
-});
+}); */
 
 app.use("/user", UserRouter)
 
