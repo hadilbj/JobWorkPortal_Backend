@@ -6,8 +6,12 @@ const UserSchema = new mongoose.Schema({
   lastname: String,
   password: String,
   email: String,
-  token: String
-
+  roles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role"
+    },
+  ]
 });
 
 const User = mongoose.model("User", UserSchema);

@@ -1,15 +1,12 @@
 var express = require("express");
 var router = express.Router();
 var userHandlers = require("../controllers/user");
-const login = require("../auth/login");
+const { login } = require("../controllers/login");
 
 router.post("/register", (req, res) => {
   userHandlers.register(req, res);
 });
 
-router.post("/login", (req, res) => {
-  console.log("test");
-  login(req, res);
-});
+router.post("/login", login);
 
 module.exports = router;

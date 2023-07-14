@@ -1,16 +1,13 @@
-const User = require("../models/user");
+const User = require("../models/user-model");
 
 exports.register = function (req, res) {
   //console.log("test")
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (user) {
-        return res
-          .status(400)
-          .json({
-            email:
-              "L'utilisateur est déjà enregistré avec cette adresse e-mail",
-          });
+        return res.status(400).json({
+          email: "L'utilisateur est déjà enregistré avec cette adresse e-mail",
+        });
       } else {
         const newUser = new User({
           firstname: req.body.firstname,
