@@ -9,7 +9,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const dbConfig = require("./config/db-config");
+const Role = require ('./models/user-model')
 
 //routes
 
@@ -20,7 +20,6 @@ app.get("/", (req, res) => {
 app.use("/user", UserRouter);
 
 const db = require("./models/index");
-const Role = db.role;
 mongoose
   .connect(
     "mongodb+srv://hadilbenjabra1:Admin123@workportal.9obizxh.mongodb.net/Node-API?retryWrites=true&w=majority"
@@ -36,17 +35,17 @@ mongoose
     console.log(error);
   });
 
-
 function initial() {
   Role.countDocuments({})
-    .then(count => {
+    .exec()
+    .then((count) => {
       if (count === 0) {
         new Role({ name: "user" })
           .save()
           .then(() => {
             console.log("added 'user' to roles collection");
           })
-          .catch(err => {
+          .catch((err) => {
             console.log("error", err);
           });
 
@@ -55,7 +54,7 @@ function initial() {
           .then(() => {
             console.log("added 'moderator' to roles collection");
           })
-          .catch(err => {
+          .catch((err) => {
             console.log("error", err);
           });
 
@@ -64,13 +63,12 @@ function initial() {
           .then(() => {
             console.log("added 'admin' to roles collection");
           })
-          .catch(err => {
+          .catch((err) => {
             console.log("error", err);
           });
       }
     })
-    .catch(err => {
+    .catch((err) => {
       console.error("Erreur lors du comptage des documents :", err);
     });
 }
-

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+/* const mongoose = require("mongoose");
 
 const Role = mongoose.model(
   "Role",
@@ -7,4 +7,4 @@ const Role = mongoose.model(
   })
 );
 
-module.exports = Role;
+module.exports = Role; */

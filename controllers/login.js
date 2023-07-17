@@ -8,13 +8,11 @@ var bcrypt = require("bcryptjs");
 
 exports.login = (req, res) => {
   User.findOne({ email: req.body.email })
-    .populate("roles", "-__v")
     .exec()
     .then((user) => {
       if (!user) {
         return res.status(404).send({ message: "User Not found." });
       }
-
       var passwordIsValid = bcrypt.compareSync(
         req.body.password,
         user.password
@@ -36,18 +34,62 @@ exports.login = (req, res) => {
 
       var authorities = [];
 
-      for (let i = 0; i < user.roles.length; i++) {
-        authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
-      }
+      // Effectuer une requête séparée pour récupérer les détails des rôles
+      Role.find({ _id: { $in: user.roles } })
+        .exec()
+        .then((roles) => {
+          // Utiliser les détails des rôles comme nécessaire
+          for (let i = 0; i < roles.length; i++) {
+            authorities.push("ROLE_" + roles[i].name.toUpperCase());
+          }
 
-      res.status(200).send({
-        password: user.password,
-        email: user.email,
-        roles: authorities,
-        accessToken: token,
-      });
+          res.status(200).send({
+            password: user.password,
+            email: user.email,
+            roles: authorities,
+            accessToken: token,
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({ message: err });
+        });
     })
     .catch((err) => {
       res.status(500).send({ message: err });
     });
 };
+/* exports.login = (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (user === null) {
+        res
+          .status(401)
+          .json({ message: "Paire login/mot de passe incorrecte" });
+      } else {
+        bcrypte
+          .compare(req.body.password, user.password)
+          .then((valid) => {
+            if (!valid) {
+              return res
+                .status(401)
+                .json({ message: "Paire login/mot de passe incorrecte" });
+            } else {
+              res.status(200).json({
+                userId: user._id,
+                token: jwt.sign({ userId: user_id }, "RANDOM_TOKEN_SECRET", {
+                  expiresIn: "24h",
+                }),
+              });
+            }
+          })
+          .catch((error) => {
+            res.status(500).json({ error });
+          });
+      }
+    })
+
+    .catch((error) => {
+      res.status(500).json({ error });
+    });
+}; */
+
