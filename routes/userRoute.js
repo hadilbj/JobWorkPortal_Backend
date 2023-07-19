@@ -14,7 +14,7 @@ router.post("/createUser", user.create);
 router.get("/create", user.findAll);
 router.get("/getUser", user.findOne);
 
-router.put("/updateUSer", user.update);
+router.put("/updateUser", user.update);
 
 router.delete("/deleteUser", user.delete);
 router.delete("/deleteAll", user.deleteAll);

@@ -42,7 +42,7 @@ exports.register = function (req, res) {
 
 // create and save new user
 exports.create = (req, res) => {
-  if (!req.body.email) {
+  if (!req.body.email || !req.body.firstname || !req.body.lastname ) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
@@ -51,7 +51,7 @@ exports.create = (req, res) => {
     email: req.body.email,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-    password: req.body.password,
+   //password: req.body.password,
   });
   //save user
   user

@@ -1,15 +1,21 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
-//const register = require("./controllers/user");
-
+const cors = require("cors");
 const UserRouter = require("./routes/userRoute");
 
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const Role = require ('./models/user-model')
+const Role = require("./models/user-model");
+
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET, POST, PUT, DELETE",
+  })
+);
 
 //routes
 
