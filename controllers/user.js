@@ -42,7 +42,7 @@ exports.register = function (req, res) {
 
 // create and save new user
 exports.create = (req, res) => {
-  if (!req.body.email || !req.body.firstname || !req.body.lastname ) {
+  if (!req.body.email || !req.body.firstname || !req.body.lastname) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
@@ -51,7 +51,7 @@ exports.create = (req, res) => {
     email: req.body.email,
     firstname: req.body.firstname,
     lastname: req.body.lastname,
-   //password: req.body.password,
+    //password: req.body.password,
   });
   //save user
   user
@@ -109,7 +109,6 @@ exports.update = (req, res) => {
 
   const id = req.query.id;
 
-
   User.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then((data) => {
       if (!data) {
@@ -138,13 +137,13 @@ exports.delete = (req, res) => {
         });
       } else {
         res.send({
-          message: "Tutorial was deleted successfully!",
+          message: "user was deleted successfully!",
         });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message: "Could not delete Tutorial with id=" + id,
+        message: "Could not delete user with id=" + id,
       });
     });
 };
