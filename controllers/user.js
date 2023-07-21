@@ -46,22 +46,36 @@ exports.create = (req, res) => {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
-  //create user
-  const user = new User({
-    email: req.body.email,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-    //password: req.body.password,
-  });
-  //save user
-  user
-    .save(user)
-    .then((data) => {
-      res.send(data);
+
+  // Vérifier si l'email existe déjà dans la base de données
+  User.findOne({ email: req.body.email })
+    .then((existingUser) => {
+      if (existingUser) {
+        // L'email existe déjà, renvoyer une réponse d'erreur
+        res.status(409).send({ message: "Email already exists!" });
+      } else {
+        // Créer un nouvel utilisateur car l'email n'existe pas
+        const user = new User({
+          email: req.body.email,
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+        });
+
+        // Enregistrer le nouvel utilisateur dans la base de données
+        user.save()
+          .then((data) => {
+            res.send(data);
+          })
+          .catch((err) => {
+            res.status(500).send({
+              message: err.message || "Some error occurred while creating the user.",
+            });
+          });
+      }
     })
     .catch((err) => {
       res.status(500).send({
-        message: err.message || "Some error occurred while creating the user.",
+        message: err.message || "Some error occurred while checking for existing email.",
       });
     });
 };
