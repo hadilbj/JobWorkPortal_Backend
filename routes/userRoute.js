@@ -11,7 +11,7 @@ router.post("/register", (req, res) => {
 router.post("/login", login);
 
 router.post("/createUser", user.create);
-router.get("/create", user.findAll);
+router.get("/getAllUser", user.findAll);
 router.get("/getUser", user.findOne);
 
 router.put("/updateUser", user.update);
